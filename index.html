@@ -67,11 +67,41 @@
         .btn-yandex:hover {
             background: #ffdb4d;
             transform: scale(1.05);
-
         }
         .btn:active {
             transform: scale(0.98);
         }
+
+        /* Стили для соцсетей */
+        .socials {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        .social-link:hover {
+            transform: scale(1.1);
+        }
+        .social-icon {
+            width: 20px;
+            height: 20px;
+        }
+        .tg { background: #0088cc; }
+        .yt { background: #ff0000; }
+        .vk { background: #4c75a3; }
+        .rtb { background: #cc0000; }
     </style>
 </head>
 <body>
@@ -84,6 +114,26 @@
             </a>
             <a class="btn btn-yandex" href="https://disk.yandex.ru/d/9NbQ3tWCgUlOGQ">
                 ⬇ Скачать с YANDEX DISK
+            </a>
+        </div>
+
+        <!-- Ссылки на соцсети -->
+        <div class="socials">
+            <a class="social-link tg" href="https://t.me/puzzle_survival">
+                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
+                Telegram
+            </a>
+            <a class="social-link yt" href="https://youtube.com/@pick_megirl?si=0QOx2JFg0ybyS7hN">
+                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_social_white_squircle_%282017%29.svg">
+                YouTube
+            </a>
+            <a class="social-link vk" href="https://vk.com/club228645535">
+                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com-logo.svg">
+                ВКонтакте
+            </a>
+            <a class="social-link rtb" href="https://rutube.ru/channel/51630057">
+                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/3/38/Rutube_logo_2021.svg">
+                RuTube
             </a>
         </div>
     </div>
