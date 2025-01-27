@@ -20,7 +20,7 @@
             padding: 40px;
             border-radius: 15px; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
+            max-width: 420px;
             text-align: center;
         }
         h1 { 
@@ -33,22 +33,41 @@
             margin-bottom: 25px; 
             opacity: 0.8; 
         }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
         .btn { 
-            display: inline-block;
-            background: #ffcc00; 
-            color: #333; 
-            padding: 15px 30px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 10px; 
-            text-decoration: none; 
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s ease-in-out;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
-        .btn:hover { 
-            background: #ffdb4d; 
+        .btn-github {
+            background: #0078D7;
+            color: white;
+        }
+        .btn-github:hover {
+            background: #0095ff;
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.6);
+        }
+        .btn-yandex {
+            background: #ffcc00;
+            color: #333;
+        }
+        .btn-yandex:hover {
+            background: #ffdb4d;
+            transform: scale(1.05);
+
         }
         .btn:active {
             transform: scale(0.98);
@@ -58,13 +77,15 @@
 <body>
     <div class="container">
         <h1>Добро пожаловать в PNS Bot</h1>
-        <p>Скачайте последнюю версию установщика с YANDEX DISK:</p>
-        <a class="btn" href="https://disk.yandex.ru/d/9NbQ3tWCgUlOGQ">
-            ⬇ Скачать c GITHUB
-        </a>
-        <a class="btn" href="https://disk.yandex.ru/d/9NbQ3tWCgUlOGQ">
-            ⬇ Скачать с YANDEX DISK
-        </a>
+        <p>Скачайте последнюю версию установщика:</p>
+        <div class="btn-container">
+            <a class="btn btn-github" href="https://github.com/user/repo/releases/latest">
+                ⬇ Скачать с GITHUB
+            </a>
+            <a class="btn btn-yandex" href="https://disk.yandex.ru/d/9NbQ3tWCgUlOGQ">
+                ⬇ Скачать с YANDEX DISK
+            </a>
+        </div>
     </div>
 </body>
 </html>
