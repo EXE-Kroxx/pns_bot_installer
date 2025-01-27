@@ -6,39 +6,39 @@
     <title>Установщик PNS Bot</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: Arial, sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             background-color: #2b2b2b;
             color: #ffffff;
         }
-        .container { 
-            background-color: #333; 
+        .container {
+            background-color: #333;
             padding: 40px;
-            border-radius: 15px; 
+            border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             max-width: 420px;
             text-align: center;
         }
-        h1 { 
-            font-size: 26px; 
+        h1 {
+            font-size: 26px;
             margin-bottom: 15px;
             color: white;
         }
-        p { 
-            font-size: 18px; 
-            margin-bottom: 25px; 
-            opacity: 0.8; 
+        p {
+            font-size: 18px;
+            margin-bottom: 25px;
+            opacity: 0.8;
         }
         .btn-container {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
-        .btn { 
+        .btn {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -75,10 +75,10 @@
         /* Стили для соцсетей */
         .socials {
             margin-top: 30px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
+            justify-items: center;
         }
         .social-link {
             display: flex;
@@ -86,21 +86,21 @@
             justify-content: center;
             gap: 8px;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: white;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
             transition: 0.3s;
-            width: 100px;
-            height: 40px;
+            width: 140px;
+            height: 50px;
         }
         .social-link:hover {
             transform: scale(1.1);
         }
         .social-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
         }
 
         /* Цвета кнопок */
@@ -129,13 +129,13 @@
                 <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
                 Telegram
             </a>
-            <a class="social-link yt" href="https://youtube.com/@pick_megirl?si=0QOx2JFg0ybyS7hN">
-                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/f/fd/YouTube_full-color_icon_%282024%29.svg">
-                YouTube
-            </a>
             <a class="social-link vk" href="https://vk.com/club228645535">
                 <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com-logo.svg">
                 ВКонтакте
+            </a>
+            <a class="social-link yt" href="https://youtube.com/@pick_megirl?si=0QOx2JFg0ybyS7hN">
+                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/f/fd/YouTube_full-color_icon_%282024%29.svg">
+                YouTube
             </a>
             <a class="social-link rtb" href="https://rutube.ru/channel/51630057">
                 <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Rutube_icon.svg">
