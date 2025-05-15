@@ -6,6 +6,7 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="script.js" type="module"></script>
 <style>
+
     body {
         background-color: #2b2b2b;
         color: #ffffff;
@@ -13,7 +14,15 @@
         margin: 0;
         border: none;
     }
-
+	.card {
+	  background-color: #333;          /* фон карточки */
+	  border-radius: 15px;             /* скруглённые углы */
+	  padding: 30px 40px;              /* внутренние отступы */
+	  box-shadow: 0 10px 30px rgba(0,0,0,0.3), inset 0 0 15px rgba(255,255,255,0.1); /* объём */
+	  max-width: 900px;                /* ограничение по ширине */
+	  margin: 40px auto;               /* центрирование и отступы сверху/снизу */
+	  color: white;                   /* текст на карточке */
+	}
     td {
         transition: background-color 0.2s linear;
     }
@@ -204,6 +213,7 @@
 </head>
 
 <body>
+<div class="card">
     <div id="for-aspect-ratio">
         <div title="score" id="score">0</div>
         <div id="game-table-container">
@@ -437,6 +447,7 @@
             </div>
         </div>
     </div>
+</div>
 </body>
 
 </html>
