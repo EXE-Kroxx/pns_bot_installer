@@ -5,50 +5,55 @@
     <title>Play Against an AI in Blockudoku/Woodoku/Block Sudoku </title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="script.js" type="module"></script>
-    <style>
-        td {
-            transition: background-color 0.2s linear;
-        }
+<style>
+    body {
+        background-color: #2b2b2b;
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        border: none;
+    }
 
-        body {
-            padding: none;
-            border: none;
-        }
+    td {
+        transition: background-color 0.2s linear;
+    }
 
-        #page-description {
-            text-align: center;
-        }
+    #page-description {
+        text-align: center;
+    }
 
-        #score {
-            text-align: center;
-            font-family: roboto;
-            font-size: 5vh;
-            font-weight: bold;
-            margin-bottom: 3vh;
-        }
+    #score {
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-size: 5vh;
+        font-weight: bold;
+        margin-bottom: 3vh;
+        color: white;
+    }
 
-        #for-aspect-ratio {
-            aspect-ratio: 2/3;
-            width: min(90vw, calc(90vh / (3/2)));
-            margin: auto;
-        }
+    #for-aspect-ratio {
+        aspect-ratio: 2/3;
+        width: min(90vw, calc(90vh / (3/2)));
+        margin: auto;
+    }
 
-        #for-aspect-ratio #game-board tr:nth-of-type(3n) td {
-            border-bottom: 2px solid black;
-        }
+    #for-aspect-ratio #game-board tr:nth-of-type(3n) td {
+        border-bottom: 2px solid #444;
+    }
 
-        #for-aspect-ratio #game-board tr td:nth-of-type(3n) {
-            border-right: 2px solid black;
-        }
+    #for-aspect-ratio #game-board tr td:nth-of-type(3n) {
+        border-right: 2px solid #444;
+    }
 
-        #game-table-container {
-            aspect-ratio: 1 / 1;
-        }
+    #game-table-container {
+        aspect-ratio: 1 / 1;
+    }
 
         #game-board {
             border-collapse: collapse;
             background: white;
-            border: 2px solid black;
+			border: 4px solid black; 
+		    outline: 4px solid #3d3d3d;  
             margin: auto;
             width: 100%;
             height: 100%;
@@ -76,106 +81,114 @@
             background: pink
         }
 
-        @media(hover: hover) and (pointer: fine) {
-            #game-board td:hover {
-                outline: 4px solid orangered;
-            }
 
-            table.pieces-on-deck tr td:hover {
-                outline: 4px solid orangered;
-            }
+
+    #game-board tr td.has-piece {
+        background: #0078D7;
+        border: 1px solid #004a99;
+    }
+
+    #game-board tr td.piece-pending {
+        background: #ed143b; /* тёмно-красный из .rtb */
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        #game-board td:hover {
+            outline: 4px solid #0095ff;
         }
 
-        #pieces-on-deck-container {
-            display: flex;
-            margin-left: auto;
-            margin-right: auto;
-            border-collapse: collapse;
-            aspect-ratio: 3 / 1;
-            width: 100%;
+        table.pieces-on-deck tr td:hover {
+            outline: 4px solid #0095ff;
         }
+    }
 
-        table.pieces-on-deck {
-            border-collapse: collapse;
-            border-spacing: 0;
-            margin: 3px;
-        }
+    #pieces-on-deck-container {
+        display: flex;
+        margin-left: auto;
+        margin-right: auto;
+        border-collapse: collapse;
+        aspect-ratio: 3 / 1;
+        width: 100%;
+    }
 
-        table.pieces-on-deck td,
-        table.pieces-on-deck th {
-            padding: 0;
-        }
+    table.pieces-on-deck {
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin: 3px;
+        width: 33%;
+		border: 0.5px solid #3d3d3d; /* рамки убраны */
+    }
 
-        table.pieces-on-deck {
-            width: 33%
-        }
+    table.pieces-on-deck td,
+    table.pieces-on-deck th {
+        padding: 0;
+    }
 
-        table.pieces-on-deck tr td {
-            width: 20%;
-            height: 20%;
-        }
+	table.pieces-on-deck tr td {
+		width: 20%;
+		height: 20%;
+	}
 
-        table.pieces-on-deck tr td.has-piece {
-            background: rgb(54, 112, 232);
-            border: 1px solid black;
-        }
+	table.pieces-on-deck tr td.has-piece {
+		background: #0078D7;
+		border: 1px solid #004a99;
+	}
 
-        .footer {
-            text-align: center;
-            font-size: 2vh;
-        }
+    .footer {
+        text-align: center;
+        font-size: 2vh;
+        color: #ccc;
+    }
 
-        #speed-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    #speed-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        #speedometer-icon {
-            height: 4vh;
-        }
+    #speedometer-icon {
+        height: 4vh;
+    }
 
-        #speed {
-            width: 50%;
-        }
-		#pause-button-container {
-			display: flex;
-			justify-content: center; /* Выравнивание по горизонтали */
-			text-align: center; /* Центрирование текста внутри контейнера */
-		}
+    #speed {
+        width: 50%;
+    }
 
-		#pause-button {
-			background-color: #007bff; /* Синий цвет */
-			color: white; /* Белый цвет текста */
-			border: none; /* Без границы */
-			padding: 10px 20px; /* Отступы */
-			font-size: 1.2em; /* Размер шрифта */
-			border-radius: 5px; /* Округлые углы */
-			cursor: pointer; /* Курсор в виде руки */
-			transition: background-color 0.3s, transform 0.2s; /* Плавные переходы */
-		}
+    #pause-button-container {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
 
-		#pause-button:hover {
-			background-color: #0056b3; /* Темно-синий цвет при наведении */
-			transform: scale(1.1); /* Увеличение размера при наведении */
-		}
+    #pause-button {
+        background-color: #0078D7;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2em;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
 
-		#pause-button:active {
-			background-color: #004085; /* Еще более темный синий при нажатии */
-		}
+    #pause-button:hover {
+        background-color: #0095ff;
+        transform: scale(1.1);
+    }
 
-		/* Состояние кнопки при "Выставить" */
-		#pause-button.pause-active {
-			background-color: #28a745; /* Зеленый цвет */
-		}
+    #pause-button:active {
+        background-color: #004a99;
+    }
 
-		#pause-button.pause-inactive {
-			background-color: #007bff; /* Синий цвет */
-		}
+    #pause-button.pause-active {
+        background-color: #28a745;
+    }
 
+    #pause-button.pause-inactive {
+        background-color: #0078D7;
+    }
+</style>
 
-
-    </style>
     <meta name="google-site-verification" content="a62LBKJ5-DBNPPVbH1buHMLMT1CEM5j456tPhU30GCE" />
     <meta name="description"
         content="Test your skills against an AI in Blockudoku/Woodoku/Block Sudoku ! Try to sabotage the computer's perfect gameplay by altering the board or pieces. Learn, be inspired, or vent your frustration." />
