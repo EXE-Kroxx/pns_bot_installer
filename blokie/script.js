@@ -228,13 +228,6 @@ function resetAIOnHumanInterferance() {
 
 // Функция паузы
 function togglePause() {
-	const randomThreshold = Math.floor(Math.random() * (300 - 100 + 1)) + 100;
-	if (state.game_state.game.score > randomThreshold) {
-		updateScore("Final score: " + randomThreshold.toString());
-		const pauseButton = document.getElementById('pause-button');
-		pauseButton.disabled = true;
-		return;
-	}
     state.isPaused = !state.isPaused;
     const pauseButton = document.getElementById('pause-button');
     if (state.isPaused) {
