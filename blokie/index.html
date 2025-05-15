@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Play Against an AI in Blockudoku/Woodoku/Block Sudoku </title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <script src="script.js" type="module"></script>
+    <style>
+        td {
+            transition: background-color 0.2s linear;
+        }
+
+        body {
+            padding: none;
+            border: none;
+        }
+
+        #page-description {
+            text-align: center;
+        }
+
+        #score {
+            text-align: center;
+            font-family: roboto;
+            font-size: 5vh;
+            font-weight: bold;
+            margin-bottom: 3vh;
+        }
+
+        #for-aspect-ratio {
+            aspect-ratio: 2/3;
+            width: min(90vw, calc(90vh / (3/2)));
+            margin: auto;
+        }
+
+        #for-aspect-ratio #game-board tr:nth-of-type(3n) td {
+            border-bottom: 2px solid black;
+        }
+
+        #for-aspect-ratio #game-board tr td:nth-of-type(3n) {
+            border-right: 2px solid black;
+        }
+
+        #game-table-container {
+            aspect-ratio: 1 / 1;
+        }
+
+        #game-board {
+            border-collapse: collapse;
+            background: white;
+            border: 2px solid black;
+            margin: auto;
+            width: 100%;
+            height: 100%;
+        }
+
+        #game-board tr td {
+            width: 10%;
+            height: 10%;
+            border: 0.5px solid black;
+        }
+
+        #game-board tr:nth-of-type(-n+3) td:nth-child(n+4):nth-child(-n+6),
+        #game-board tr:nth-child(n+4):nth-child(-n+6) td:nth-child(-n+3),
+        #game-board tr:nth-child(n+4):nth-child(-n+6) td:nth-child(n+7):nth-child(-n+9),
+        #game-board tr:nth-child(n+7):nth-child(-n+9) td:nth-child(n+4):nth-child(-n+6) {
+            background: rgb(228, 233, 238)
+        }
+
+        #game-board tr:nth-of-type(n):nth-of-type(n) td.has-piece:nth-of-type(n):nth-of-type(n) {
+            background: rgb(54, 112, 232);
+            border: 1px solid black;
+        }
+
+        #game-board tr:nth-of-type(n):nth-of-type(n) td.piece-pending:nth-of-type(n):nth-of-type(n) {
+            background: pink
+        }
+
+        @media(hover: hover) and (pointer: fine) {
+            #game-board td:hover {
+                outline: 4px solid orangered;
+            }
+
+            table.pieces-on-deck tr td:hover {
+                outline: 4px solid orangered;
+            }
+        }
+
+        #pieces-on-deck-container {
+            display: flex;
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+            aspect-ratio: 3 / 1;
+            width: 100%;
+        }
+
+        table.pieces-on-deck {
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin: 3px;
+        }
+
+        table.pieces-on-deck td,
+        table.pieces-on-deck th {
+            padding: 0;
+        }
+
+        table.pieces-on-deck {
+            width: 33%
+        }
+
+        table.pieces-on-deck tr td {
+            width: 20%;
+            height: 20%;
+        }
+
+        table.pieces-on-deck tr td.has-piece {
+            background: rgb(54, 112, 232);
+            border: 1px solid black;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 2vh;
+        }
+
+        #speed-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #speedometer-icon {
+            height: 4vh;
+        }
+
+        #speed {
+            width: 50%;
+        }
+		#pause-button-container {
+			display: flex;
+			justify-content: center; /* Выравнивание по горизонтали */
+			text-align: center; /* Центрирование текста внутри контейнера */
+		}
+
+		#pause-button {
+			background-color: #007bff; /* Синий цвет */
+			color: white; /* Белый цвет текста */
+			border: none; /* Без границы */
+			padding: 10px 20px; /* Отступы */
+			font-size: 1.2em; /* Размер шрифта */
+			border-radius: 5px; /* Округлые углы */
+			cursor: pointer; /* Курсор в виде руки */
+			transition: background-color 0.3s, transform 0.2s; /* Плавные переходы */
+		}
+
+		#pause-button:hover {
+			background-color: #0056b3; /* Темно-синий цвет при наведении */
+			transform: scale(1.1); /* Увеличение размера при наведении */
+		}
+
+		#pause-button:active {
+			background-color: #004085; /* Еще более темный синий при нажатии */
+		}
+
+		/* Состояние кнопки при "Выставить" */
+		#pause-button.pause-active {
+			background-color: #28a745; /* Зеленый цвет */
+		}
+
+		#pause-button.pause-inactive {
+			background-color: #007bff; /* Синий цвет */
+		}
+
+
+
+    </style>
+    <meta name="google-site-verification" content="a62LBKJ5-DBNPPVbH1buHMLMT1CEM5j456tPhU30GCE" />
+    <meta name="description"
+        content="Test your skills against an AI in Blockudoku/Woodoku/Block Sudoku ! Try to sabotage the computer's perfect gameplay by altering the board or pieces. Learn, be inspired, or vent your frustration." />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JSG4CGEK2S"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-JSG4CGEK2S');
+    </script>
+</head>
+
+<body>
+    <div id="for-aspect-ratio">
+        <div title="score" id="score">0</div>
+        <div id="game-table-container">
+            <table title="Игровое поле. Нажмите на клетку, чтобы добавить или удалить блок."
+                id="game-board">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <div id="pieces-on-deck-container"
+                title="Доступные фигуры. Нажмите на фигуру, чтобы изменить её форму">
+                <table class="pieces-on-deck" id="piece-on-deck-0">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <table class="pieces-on-deck" id="piece-on-deck-1">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td></td>
+                        <td> </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <table class="pieces-on-deck" id="piece-on-deck-2">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+		<div id="pause-button-container" title="Нажмите, чтобы изменить поле или вычислить следующий ход.">
+			<p>
+				<button id="pause-button">Рисовать</button>
+			</p>
+		</div>
+        <div class="footer">
+            <div id="speed-container">
+                <img id="speedometer-icon" src="speedometer.svg" />
+                <input title="Изменение скорости." name="speed" type="range" id="speed" min="1" max="10" value="3">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
