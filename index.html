@@ -16,168 +16,161 @@
     <title>Установщик PNS Bot</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #2b2b2b;
-    color: #ffffff;
-}
-.container {
-    background-color: #333;
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    max-width: 480px; /* было 420 */
-    text-align: center;
-    overflow: visible; /* чтобы кнопки при увеличении не обрезались */
-}
-h1 {
-    font-size: 26px;
-    margin-bottom: 15px;
-    color: white;
-}
-p {
-    font-size: 18px;
-    margin-bottom: 25px;
-    opacity: 0.8;
-}
-.btn-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 16px; /* уменьшил с 18 */
-    font-weight: bold;
-    padding: 12px; /* уменьшил с 15 */
-    border-radius: 8px;
-    text-decoration: none;
-    transition: 0.3s ease-in-out;
-    width: 100%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    position: relative; /* для z-index */
-}
-.btn:hover {
-    transform: scale(1.05);
-    z-index: 10; /* чтобы при увеличении кнопка была поверх других */
-}
-.btn-github {
-    background: #0078D7;
-    color: white;
-}
-.btn-github:hover {
-    background: #0095ff;
-}
-.btn-yandex {
-    background: #ffcc00;
-    color: #333;
-}
-.btn-yandex:hover {
-    background: #ffdb4d;
-}
-.btn-beta {
-    background: #555;
-    color: white;
-}
-.btn-beta:hover {
-    background: #777;
-}
-.btn:active {
-    transform: scale(0.98);
-}
-.btn-instruction {
-    background: #28a745;
-    color: white;
-}
-.btn-instruction:hover {
-    background: #34d058;
-}
-/* Новая кнопка */
-.btn-tetromino {
-    background: #28a745;
-    color: white;
-}
-.btn-tetromino:hover {
-    background: #34d058;
-}
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #2b2b2b;
+            color: #ffffff;
+        }
+        .container {
+            background-color: #333;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 420px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: white;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s ease-in-out;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .btn-github {
+            background: #0078D7;
+            color: white;
+        }
+        .btn-github:hover {
+            background: #0095ff;
+            transform: scale(1.05);
+        }
+        .btn-yandex {
+            background: #ffcc00;
+            color: #333;
+        }
+        .btn-yandex:hover {
+            background: #ffdb4d;
+            transform: scale(1.05);
+        }
+        .btn-beta {
+            background: #555;
+            color: white;
+        }
+        .btn-beta:hover {
+            background: #777;
+            transform: scale(1.05);
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-instruction {
+            background: #28a745;
+            color: white;
+        }
+        .btn-instruction:hover {
+            background: #34d058;
+            transform: scale(1.05);
+        }
+        /* Новая кнопка */
+        .btn-tetromino {
+            background: #28a745;
+            color: white;
+        }
+        .btn-tetromino:hover {
+            background: #34d058;
+            transform: scale(1.05);
+        }
 
-/* Стили для соцсетей */
-.socials {
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    justify-items: center;
-}
-.social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-decoration: none;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    transition: 0.3s;
-    width: 140px;
-    height: 50px;
-}
-.social-link:hover {
-    transform: scale(1.1);
-}
-.social-icon {
-    width: 24px;
-    height: 24px;
-}
+        /* Стили для соцсетей */
+        .socials {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            justify-items: center;
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+            width: 140px;
+            height: 50px;
+        }
+        .social-link:hover {
+            transform: scale(1.1);
+        }
+        .social-icon {
+            width: 24px;
+            height: 24px;
+        }
 
-/* Цвета кнопок */
-.tg { background: #0088cc; }
-.yt { background: white; color: #000000; }
-.vk { background: #4c75a3; }
-.rtb { background: #ed143b; }
+        /* Цвета кнопок */
+        .tg { background: #0088cc; }
+        .yt { background: white; color: #000000; }
+        .vk { background: #4c75a3; }
+        .rtb { background: #ed143b; }
 
-.dropdown-wrapper {
-  display: flex;
-  flex-direction: column;
-}
+        .dropdown-wrapper {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .dropdown-toggle {
+          margin-top: 15px; /* такой же отступ, как между кнопками */
+          margin-bottom: 0;
+        }
+        
+        .dropdown-content {
+          overflow: hidden;
+          max-height: 0;
+          opacity: 0;
+          transition: max-height 0.4s ease, opacity 0.3s ease;
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+        
+        .dropdown-content.open {
+          max-height: 200px; /* высота с запасом */
+          opacity: 1;
+        }
 
-.dropdown-toggle {
-  margin-top: 15px; /* такой же отступ, как между кнопками */
-  margin-bottom: 0;
-}
-
-.dropdown-content {
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: max-height 0.4s ease, opacity 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.dropdown-content.open {
-  max-height: 200px; /* высота с запасом */
-  opacity: 1;
-}
 
     </style>
-</head>
-<script>
-  function toggleDropdown() {
-    const el = document.getElementById('dropdown-tools');
-    el.classList.toggle('open');
-  }
-</script>
 <body>
     <div class="container">
         <h1>Добро пожаловать!</h1>
