@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Настройка и решатель головоломки Purifying Reagents из игры Puzzle and Survival" />
+    <meta name="author" content="470[TPM]OB-HAVE" />
+    <title>Решатель Water Sort, Puzzle &amp; Survival</title>
+
+    <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon" />
+    <link rel="icon" href="favicon-32x32.png" type="image/x-icon" />
+
+    <link rel="stylesheet" href="../../maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="styles/index.css" />
+</head>
+<body>
+	<div class="container" style="max-width: 435px; margin: 0 auto; padding-top: 15px;">
+    <ul style="list-style-type:none; padding-left: 0; margin-bottom: 15px;">
+      <li style="text-align: center;">
+        <a style="font-size:small;" href="https://www.robertfidler.com/puzzle-n-survival/index.html" target="_blank">Решатель Water Sort и Ball Sort</a>
+        <div style="clear: both; text-align: left;">
+          <p>Ссылка выше ведёт на оригинальную версию, которую я использовал для создания своей версии решателя Water Sort. Особая благодарность автору.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Блок с кнопками и настройками над полем с пробирками -->
+  <div id="controls-container" class="container">
+    <form role="form" style="max-width: 435px; margin: 0 auto;">
+      
+      <!-- Первый ряд: Кол-во пробирок + кнопка решить -->
+      <div class="form-group">
+        <div class="input-group" style="flex-grow: 1; min-width: 220px;">
+          <span class="input-group-addon">Количество пробирок</span>
+          <input type="number" class="form-control" min="3" max="18"
+                 data-bind="enable: CanSolve, value: NumberOfTubes" />
+        </div>
+        <button type="button" class="btn btn-success" data-bind="enable: CanSolve, click: Solve">
+          <span class="glyphicon glyphicon-ok"></span> <span data-bind="text: SolvedLabel"></span>
+        </button>
+      </div>
+
+      <!-- Второй ряд: Назад, шаги, вперед -->
+      <div class="form-group">
+        <button type="button" class="btn btn-info" data-bind="click: Back, enable: CanBack">
+          <span class="glyphicon glyphicon-arrow-left"></span> Назад
+        </button>
+
+        <input type="text" readonly class="form-control text-center"
+               data-bind="enable: CanStep, value: SolutionLabel" />
+
+        <button type="button" class="btn btn-info" data-bind="click: Step, enable: CanStep">
+          Шаг <span class="glyphicon glyphicon-arrow-right"></span>
+        </button>
+      </div>
+
+      <!-- Третий ряд: Очистить и Сброс -->
+      <div class="form-group">
+        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModalClearConfirmation">
+          <span class="glyphicon glyphicon-remove-circle"></span> Очистить
+        </button>
+
+        <button type="button" class="btn btn-danger" data-bind="click: Reset">
+          <span class="glyphicon glyphicon-refresh"></span> Сброс
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- Основной контент -->
+  <div class="container" style="max-width: 435px; margin: 0 auto;">
+    <!-- Игровое поле -->
+    <div class="text-center" style="margin-bottom: 20px;">
+      <canvas id="canvas" class="disable-dbl-tap-zoom" width="435" height="620">
+        Ваш браузер не поддерживает элемент canvas.
+      </canvas>
+      <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasTextarea" aria-labelledby="offcanvasTextareaLabel">
+        <div class="offcanvas-body" style="width: 435px; margin: 0 auto;">
+          <textarea class="form-control" rows="5" placeholder="Нажмите «Решить», чтобы получить ходы..." data-bind="value: OutputWindow" style="resize: none;"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Настройки -->
+    <div>
+      <form id="PuzzleSetup">
+        <h4>Настройка головоломки
+          <div class="btn-toolbar pull-right" role="toolbar">
+            <div class="btn-group mr-2" role="group">
+              <button type="button" class="btn btn-outline-dark" data-bind="click: SetCookieData, enable: CookieDataModified" data-toggle="tooltip" data-placement="top" title="Сохранить">
+                <span class="glyphicon glyphicon-save"></span>
+              </button>
+              <button type="button" class="btn btn-outline-dark" data-bind="click: ResetWithCookie, enable: HasCookieData" data-toggle="tooltip" data-placement="top" title="Загрузить">
+                <span class="glyphicon glyphicon-download"></span>
+              </button>
+            </div>
+          </div>
+        </h4>
+
+        <ul class="nav nav-sidebar well">
+          <li style="font-family: Courier New, Courier, monospace">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="input-group" style="padding-top: 2px">
+                  <span class="input-group-addon">№ колбы</span>
+                  <span class="input-group-addon">Цвета</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-group" style="padding-top: 2px">
+                  <span class="input-group-addon">№ колбы</span>
+                  <span class="input-group-addon">Цвета</span>
+                </div>
+              </div>
+            </div>
+            <div class="row" data-bind="foreach: Tubes">
+              <div class="col-md-6">
+                <div class="input-group" style="width: 100%; padding-top: 2px">
+                  <span class="input-group-addon" style="width:70pt" data-bind="text: $data.Index"></span>
+                  <input type="text" class="form-control uppercase" maxlength="4" data-bind="value: $data.LetterColorCode, valueUpdate: 'afterkeydown'" oninput="this.value = this.value.replace(/[^a-pA-P]/g, '')" />
+                </div>
+              </div>
+            </div>
+
+            <ul>
+              <li style="color: black;">Определите пробирки с помощью кодов цвета (снизу вверх).</li>
+              <li style="color: black;">Используйте ключ цвета ниже как легенду.</li>
+            </ul>
+            <hr />
+            <div class="row" data-bind="foreach: Pallet">
+              <div class="col-md-3" style="padding-left: 5px; padding-right: 5px;">
+                <div class="input-group" style="width: 70%">
+                  <span class="input-group-addon" data-bind="text: $data.Letter"></span>
+                  <input type="color" class="form-control selector-tube" data-bind="value: $data.HexColor" />
+                  <span class="input-group-addon" data-bind="text: $data.Counter, style: { backgroundColor: $data.BadgeColor }"></span>
+                </div>
+              </div>
+            </div>
+            <ul>
+              <li style="color: black;">Каждому цвету соответствует буква.</li>
+              <li style="color: black;">Цвет должен использоваться 4 или 0 раз для решения.</li>
+            </ul>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модальное окно -->
+  <div class="modal fade" id="myModalClearConfirmation" tabindex="-1" role="dialog" aria-labelledby="myModalClearLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalClearLabel">Очистить настройку головоломки</h4>
+        </div>
+        <div class="modal-body">
+          Это действие полностью сбросит текущую настройку головоломки и позволит начать заново.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+          <button type="button" class="btn btn-warning" data-bind="click: Clear">
+            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;&nbsp;Очистить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="snackbar" data-bind="class: ToastClasses" role="alert">
+    <strong data-bind="text: DisplayTagLine"></strong>&nbsp;<span data-bind="text: DisplayMessage"></span>
+  </div>
+
+  <!-- Скрипты -->
+  <script src="../../code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="../../code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="../../cdn.jsdelivr.net/npm/js-cookie%403.0.5/dist/js.cookie.min.js"></script>
+  <script src="../../maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="../../cdnsrc.asp.net/ajax/knockout/knockout-3.5.0.js"></script>
+  <script src="../../chir.ag/projects/ntc/ntc.js"></script>
+  <script src="scripts/PalletModel.js"></script>
+  <script src="scripts/TubeModel.js"></script>
+  <script src="scripts/Stack.js"></script>
+  <script src="scripts/GameState.js"></script>
+  <script src="scripts/GameDisplay.js"></script>
+  <script src="scripts/WaterSortViewModel.js"></script>
+
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+      var tubes = [
+        [1, "BBBL"],
+        [2, "IDLB"],
+        [3, "GLIL"],
+        [4, "DGIK"],
+        [5, "KDHK"],
+        [6, "HGHI"],
+        [7, "KHGD"],
+        [8, ""],
+        [9, ""]
+      ];
+      var pallet = [
+        ["A", "#A10579"], ["B", "#0000FF"], ["C", "#F7468A"], ["D", "#FFFF00"],
+        ["E", "#FFC0CB"], ["F", "#228B22"], ["G", "#00FF00"], ["H", "#E4CFDE"],
+        ["I", "#FFA500"], ["J", "#800080"], ["K", "#FF0000"], ["L", "#8E0000"],
+        ["M", "#D3D3D3"], ["N", "#D3D3D3"], ["O", "#D3D3D3"], ["P", "#D3D3D3"]
+      ];
+      var vm = new WaterSortViewModel({ "Tubes": tubes, "Pallet": pallet });
+      ko.applyBindings(vm);
+      vm.UpdateOnChangeEvents();
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+/* Общий фон страницы */
+html, body {
+    background-color: #2b2b2b;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    color: #eee; /* чтобы текст был виден на тёмном фоне */
+    box-sizing: border-box;
+}
+
+/* Учитываем padding для фиксированной шапки, если есть */
+body {
+    padding-top: 50px;
+}
+
+/* Стили для блока управления */
+#controls-container {
+    max-width: 435px;
+    margin: 20px auto 10px;
+    padding: 10px 15px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #3a3a3a;
+    color: #eee;
+}
+
+#controls-container .form-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+#controls-container .input-group-addon {
+    min-width: 140px;
+    text-align: left;
+    background-color: #444;
+    border: 1px solid #555;
+    color: #ccc;
+}
+
+#controls-container input[type="number"] {
+    width: 80px;
+    background-color: #2b2b2b;
+    border: 1px solid #555;
+    color: #eee;
+}
+
+#controls-container input[type="text"].text-center {
+    width: 120px;
+    max-width: 120px;
+    background-color: #2b2b2b;
+    border: 1px solid #555;
+    color: #eee;
+}
+
+#controls-container button {
+    min-width: 120px;
+}
+
+/* Кнопки Bootstrap при темном фоне - немного подсветим */
+#controls-container .btn-success {
+    background-color: #4caf50;
+    border-color: #4caf50;
+    color: #fff;
+}
+
+#controls-container .btn-success:hover,
+#controls-container .btn-success:focus {
+    background-color: #45a049;
+    border-color: #45a049;
+    color: #fff;
+}
+
+/* Глобальные отступы */
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.navbar-fixed-top {
+    border: 0;
+}
+
+/* Боковая панель */
+.sidebar {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding: 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
+}
+
+/* Навигация в боковой панели */
+.nav-sidebar {
+    margin-right: -21px;
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+    color: #fff;
+    background-color: #428bca;
+}
+
+/* Основной контент */
+.main {
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .main {
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+}
+
+.main .page-header {
+    margin-top: 0;
+}
+
+/* Отступы для блоков */
+.placeholders {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.placeholders h4 {
+    margin-bottom: 0;
+}
+
+.placeholder {
+    margin-bottom: 20px;
+}
+
+.placeholder img {
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.offscreen {
+    position: absolute;
+    top: -100px;
+    left: -100px;
+}
+
+/* Цветовые input */
+input::-webkit-color-swatch {
+    border: none;
+}
+
+input.uppercase[type=text] {
+    text-transform: uppercase;
+}
+
+/* Холст */
+canvas {
+    border: 1px solid black;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Отключение зума по двойному тапу */
+.disable-dbl-tap-zoom {
+    touch-action: manipulation;
+}
+
+/* Сетка колб */
+.tiles {
+    font-size: small;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.tiles div {
+    margin: 4px;
+    flex: 0 1 22%; /* По 4 в строке на десктопе */
+    max-width: 22%;
+}
+
+@media (max-width: 768px) {
+    .tiles div {
+        flex: 0 1 30%; /* По 3 в строке на планшетах */
+        max-width: 30%;
+    }
+}
+
+@media (max-width: 480px) {
+    .tiles div {
+        flex: 0 1 45%; /* По 2 в строке на телефонах */
+        max-width: 45%;
+    }
+}
+
+/* Всплывающие уведомления */
+.toast-alerts {
+    z-index: 999;
+    width: 100%;
+    text-align: center;
+}
+
+.toast-bottom {
+    position: fixed;
+    top: 38pt;
+    width: 100%;
+    z-index: 9999;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: center;
+    display: none;
+}
