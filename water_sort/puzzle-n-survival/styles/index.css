@@ -234,3 +234,17 @@ canvas {
     text-align: center;
     display: none;
 }
+.highlight-box {
+  border: 2px solid #34d058;       /* зелёная рамка */
+  background-color: #2f5233;       /* чуть темнее зелёный фон */
+  color: #d0f0c0;                  /* светлый цвет текста */
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 18px;
+  max-width: 400px;
+  margin: 20px auto;
+  text-align: center;
+  box-shadow: 0 0 8px #34d058aa;  /* легкое свечение рамки */
+  user-select: none;
+}
