@@ -28,49 +28,59 @@
     </ul>
   </div>
 
-<!-- Блок с кнопками и настройками над полем с пробирками -->
+<!-- Блок с кнопками и настройками -->
 <div id="controls-container" class="container">
   <form role="form" style="max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
 
-    <!-- Первый ряд: Кол-во пробирок + кнопка решить -->
-    <div class="form-group d-flex" style="display: flex; gap: 10px;">
-      <div class="input-group" style="flex: 1 1 0;">
+    <!-- Первый ряд -->
+    <div class="form-group" style="display: flex; gap: 10px; flex-wrap: nowrap;">
+      <div class="input-group" style="flex: 1 1 0; min-width: 0;">
         <span class="input-group-addon">Количество пробирок</span>
         <input type="number" class="form-control" min="3" max="18"
                data-bind="enable: CanSolve, value: NumberOfTubes" />
       </div>
-      <button type="button" class="btn btn-success" data-bind="enable: CanSolve, click: Solve" style="flex: 0 0 auto;">
+      <button type="button" class="btn btn-success"
+              data-bind="enable: CanSolve, click: Solve"
+              style="flex: 0 0 auto; white-space: nowrap;">
         <span class="glyphicon glyphicon-ok"></span> <span data-bind="text: SolvedLabel"></span>
       </button>
     </div>
 
-    <!-- Второй ряд: Назад, шаги, вперед -->
-    <div class="form-group d-flex" style="display: flex; gap: 10px;">
-      <button type="button" class="btn btn-info" data-bind="click: Back, enable: CanBack" style="flex: 1 1 0;">
+    <!-- Второй ряд -->
+    <div class="form-group" style="display: flex; gap: 10px; flex-wrap: nowrap;">
+      <button type="button" class="btn btn-info" data-bind="click: Back, enable: CanBack"
+              style="flex: 1 1 0; min-width: 0; white-space: nowrap;">
         <span class="glyphicon glyphicon-arrow-left"></span> Назад
       </button>
 
       <input type="text" readonly class="form-control text-center"
-             data-bind="enable: CanStep, value: SolutionLabel" style="flex: 1 1 0;" />
+             data-bind="enable: CanStep, value: SolutionLabel"
+             style="flex: 1 1 0; min-width: 0;" />
 
-      <button type="button" class="btn btn-info" data-bind="click: Step, enable: CanStep" style="flex: 1 1 0;">
+      <button type="button" class="btn btn-info" data-bind="click: Step, enable: CanStep"
+              style="flex: 1 1 0; min-width: 0; white-space: nowrap;">
         Шаг <span class="glyphicon glyphicon-arrow-right"></span>
       </button>
     </div>
 
-    <!-- Третий ряд: Очистить и Сброс -->
-    <div class="form-group d-flex" style="display: flex; gap: 10px;">
-      <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModalClearConfirmation" style="flex: 1 1 0;">
+    <!-- Третий ряд -->
+    <div class="form-group" style="display: flex; gap: 10px; flex-wrap: nowrap;">
+      <button type="button" class="btn btn-warning"
+              data-toggle="modal" data-target="#myModalClearConfirmation"
+              style="flex: 1 1 0; min-width: 0; white-space: nowrap;">
         <span class="glyphicon glyphicon-remove-circle"></span> Очистить
       </button>
 
-      <button type="button" class="btn btn-danger" data-bind="click: Reset" style="flex: 1 1 0;">
+      <button type="button" class="btn btn-danger"
+              data-bind="click: Reset"
+              style="flex: 1 1 0; min-width: 0; white-space: nowrap;">
         <span class="glyphicon glyphicon-refresh"></span> Сброс
       </button>
     </div>
 
   </form>
 </div>
+
 
 
   <!-- Основной контент -->
