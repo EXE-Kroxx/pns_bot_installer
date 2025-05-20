@@ -253,9 +253,9 @@ var WaterSortViewModel = function (config) {
         self.DisplayTag(tag)
         self.DisplayMessage(message);
         if (tag == "success") {
-            self.DisplayTagLine("Ошибка!");            
+            self.DisplayTagLine("Отлично!");            
         } else {
-            self.DisplayTagLine("Отлично!");
+            self.DisplayTagLine("Ошибка!");
         }
         $('#snackbar').fadeIn(500).delay(animationTime).fadeOut(500);
     };
