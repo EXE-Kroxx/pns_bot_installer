@@ -190,11 +190,11 @@ var WaterSortViewModel = function (config) {
         const solution = state.Solve(state);
 
         if (solution.length === 0) {
-            self.DisplaySnackbar("No solution found, please reconfigure water tubes.", "danger");
+            self.DisplaySnackbar("Решение не найдено.", "danger");
         } else {
             self.Solution(solution);
             self.SolutionIndex(0);
-            self.DisplaySnackbar("Found a solution, please use Step and Back to review the solution.", "success");
+            self.DisplaySnackbar("Решение найдено, пожалуйста, используйте Вперед и Назад для просмотра решения.", "success");
         }
         self.OutputWindow("");
     };
@@ -253,9 +253,9 @@ var WaterSortViewModel = function (config) {
         self.DisplayTag(tag)
         self.DisplayMessage(message);
         if (tag == "success") {
-            self.DisplayTagLine("Sweet!");            
+            self.DisplayTagLine("Ошибка!");            
         } else {
-            self.DisplayTagLine("Oh snap!");
+            self.DisplayTagLine("Отлично!");
         }
         $('#snackbar').fadeIn(500).delay(animationTime).fadeOut(500);
     };
