@@ -150,6 +150,42 @@
 
         label { display: flex; align-items: center; gap: 8px; }
         h2, h3 { margin-top: 0; font-weight: 500; }
+
+        /* Стили для блока с инструкцией */
+        .instructions-panel {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .instructions-panel h3 {
+            margin-bottom: 15px;
+            color: var(--text-main); /* Изменено на text-main */
+            text-align: center;
+        }
+        .instructions-panel ul {
+            list-style-type: none;
+            padding-left: 0;
+            text-align: left;
+        }
+        .instructions-panel li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            padding-left: 25px;
+            position: relative;
+            color: var(--text-main); /* Убеждаемся, что текст белый */
+        }
+        .instructions-panel li::before {
+            content: '➤';
+            position: absolute;
+            left: 0;
+            color: var(--accent-main); /* Символ акцента остается синим */
+        }
+        .instructions-panel strong {
+            color: var(--text-main); /* Жирный текст остается белым */
+        }
+
     </style>
 </head>
 <body>
@@ -176,6 +212,20 @@
     <div class="footer">
         <div class="button-group"><button id="copy-btn">Копировать код</button><button id="clear-btn">Очистить всё</button></div>
         <div id="status-bar"><span id="pm-counter">ЛС: 0/1000</span> | <span id="chat-counter">Чат: 0/294</span></div>
+    </div>
+
+    <!-- ДОБАВЛЕННЫЙ БЛОК С ИНСТРУКЦИЕЙ -->
+    <div class="instructions-panel">
+        <h3>Как пользоваться редактором</h3>
+        <ul>
+            <li>Напишите или вставьте ваш текст в поле <strong>"Редактор текста"</strong>.</li>
+            <li>Выделите фрагмент текста, который хотите окрасить. Затем нажмите на нужный цвет на <strong>Панели быстрых цветов</strong> вверху.</li>
+            <li>Для выбора произвольного цвета используйте круглую палитру. Кнопка <strong>"B"</strong> сбрасывает цвет выделенного текста на стандартный белый.</li>
+            <li>Эффекты <strong>"Радуга"</strong> применяют случайные цвета к выделенному тексту: <strong>"@ по символам"</strong> — к каждой букве, <strong>"@@ по словам"</strong> — к каждому слову.</li>
+            <li>Включите опцию <strong>"Прозрачность"</strong> и двигайте ползунок, чтобы добавить тексту полупрозрачности. Это будет учтено при генерации кода.</li>
+            <li>Готовый код для вставки в чат автоматически генерируется в поле <strong>"Готовый код для чата"</strong>.</li>
+            <li>Нажмите <strong>"Копировать код"</strong>, чтобы скопировать результат в буфер обмена. Кнопка <strong>"Очистить всё"</strong> полностью сбрасывает редактор.</li>
+        </ul>
     </div>
 </div>
 
