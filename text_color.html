@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Chat Editor - pnsbot.ru Style</title>
+    <style>
+        /* --- Стилизация в стиле pnsbot.ru --- */
+        :root {
+            --bg-main: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-main: #ffffff;
+            --accent-main: #1e90ff;
+            --accent-hover: #1c86ee;
+            --border-color: #333333;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --danger-color: #e74c3c;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .toolbar {
+            background-color: var(--bg-secondary);
+            padding: 8px;
+            border-radius: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .color-swatch, .tool-button {
+            width: 24px;
+            height: 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.2s;
+        }
+        .color-swatch:hover, .tool-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 5px var(--accent-main);
+        }
+
+        .tool-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: var(--bg-secondary);
+            border-color: var(--accent-main);
+        }
+
+        #color-picker-input {
+            width: 24px; height: 24px; padding: 0; border: none; background: none; cursor: pointer;
+        }
+
+        #editor {
+            min-height: 150px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 11pt;
+            white-space: pre-wrap;
+            outline: none;
+            color: var(--text-main);
+        }
+        #editor:focus {
+            border-color: var(--accent-main);
+            box-shadow: 0 0 8px rgba(30, 144, 255, 0.5);
+        }
+
+        .controls-grid { display: flex; gap: 15px; flex-wrap: wrap; }
+
+        .control-panel {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .button-group { display: flex; gap: 10px; }
+
+        button {
+            background-color: var(--accent-main);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 10pt;
+            font-weight: bold;
+            cursor: pointer;
+            flex-grow: 1;
+            transition: background-color 0.2s ease;
+        }
+        button:hover { background-color: var(--accent-hover); }
+
+        #code-output {
+            width: 100%;
+            min-height: 100px;
+            box-sizing: border-box;
+            background-color: var(--bg-secondary);
+            color: #dcdcdc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 10px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10pt;
+            font-weight: bold;
+        }
+
+        label { display: flex; align-items: center; gap: 8px; }
+        h2, h3 { margin-top: 0; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2>Редактор цветного текста</h2>
+
+    <div id="toolbar" class="toolbar">
+        <div class="tool-button" id="reset-color" title="Сбросить цвет">B</div>
+        <input type="color" id="color-picker-input" title="Выбрать произвольный цвет">
+    </div>
+
+    <label for="editor"><b>Редактор текста:</b></label>
+    <div id="editor" contenteditable="true" style="color: #ffffff;"></div>
+
+    <div class="controls-grid">
+        <div class="control-panel"><h3>Эффекты 'Радуга'</h3><div class="button-group"><button id="rainbow-char-btn">@ по символам</button><button id="rainbow-word-btn">@@ по словам</button></div></div>
+        <div class="control-panel"><h3>Прозрачность</h3><label><input type="checkbox" id="transparency-check">Включить</label><input type="range" id="transparency-slider" min="0" max="255" value="128" disabled></div>
+    </div>
+
+    <label for="code-output"><b>Готовый код для чата (обновляется автоматически):</b></label>
+    <textarea id="code-output" readonly></textarea>
+
+    <div class="footer">
+        <div class="button-group"><button id="copy-btn">Копировать код</button><button id="clear-btn">Очистить всё</button></div>
+        <div id="status-bar"><span id="pm-counter">ЛС: 0/1000</span> | <span id="chat-counter">Чат: 0/294</span></div>
+    </div>
+</div>
+
+<script>
+    // --- Логика приложения (без изменений) ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const editor = document.getElementById('editor');
+        const codeOutput = document.getElementById('code-output');
+        const toolbar = document.getElementById('toolbar');
+        const colorPickerInput = document.getElementById('color-picker-input');
+        const resetColorBtn = document.getElementById('reset-color');
+        const rainbowCharBtn = document.getElementById('rainbow-char-btn');
+        const rainbowWordBtn = document.getElementById('rainbow-word-btn');
+        const transparencyCheck = document.getElementById('transparency-check');
+        const transparencySlider = document.getElementById('transparency-slider');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const pmCounter = document.getElementById('pm-counter');
+        const chatCounter = document.getElementById('chat-counter');
+
+        const defaultColor = "#ffffff";
+        const blackColor = "#000000";
+        let transparencyEnabled = false;
+        let transparencyValue = 128;
+
+        const presetColors = ["#ffffff", "#ff5252", "#ff79a6", "#e040fb", "#7c4dff", "#536dfe", "#448aff", "#40c4ff", "#18ffff", "#64ffda", "#69f0ae", "#b2ff59", "#eeff41", "#ffd740", "#ffab40", "#ff6e40", "#9e9e9e", "#795548", "#cddc39", "#00bcd4", "#03a9f4", "#2196f3", "#ffeb3b", "#ff9800"];
+        const rainbowColors = presetColors.filter(c => !["#ffffff", "#9e9e9e", "#795548"].includes(c));
+
+        let savedRange = null;
+
+        function saveSelection() {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                if (editor.contains(range.commonAncestorContainer)) savedRange = range;
+            }
+        }
+        function restoreSelection() { if (savedRange) { const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(savedRange); }}
+
+        presetColors.forEach(color => {
+            const swatch = document.createElement('div');
+            swatch.className = 'color-swatch';
+            swatch.style.backgroundColor = color;
+            swatch.title = `Применить цвет ${color}`;
+            swatch.addEventListener('click', () => applyColor(color));
+            toolbar.appendChild(swatch);
+        });
+
+        function hexToChatColor(hex, alphaEnabled, alphaValue) {
+            hex = hex.startsWith('#') ? hex.substring(1) : hex;
+            if (hex.length === 6) {
+                const alphaHex = alphaEnabled ? alphaValue.toString(16).padStart(2, '0') : '';
+                return `[${hex[0]}[[#C0]-]${hex.substring(1)}${alphaHex}]`;
+            }
+            return '';
+        }
+
+        function rgbToHex(rgb) {
+            if (!rgb) return null;
+            if (rgb.startsWith('#')) return rgb;
+            const result = rgb.match(/\d+/g);
+            if (!result) return null;
+            return "#" + result.map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
+        }
+
+        function applyColor(color) {
+            editor.focus();
+            restoreSelection();
+            document.execCommand('foreColor', false, color);
+            editor.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        function updateCodeAndCounters() {
+            let outputParts = [];
+            let inColoredSequence = false;
+            const whiteCode = hexToChatColor("#ffffff", false, 0);
+
+            function parseNodes(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    if (inColoredSequence) { outputParts.push(whiteCode); inColoredSequence = false; }
+                    outputParts.push(node.textContent);
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    if (node.tagName === 'BR') {
+                        if (inColoredSequence) { outputParts.push(whiteCode); inColoredSequence = false; }
+                        outputParts.push('\n');
+                        return;
+                    }
+
+                    const color = rgbToHex(node.style.color || node.getAttribute('color'));
+                    const isDefault = !color || color === defaultColor || color === blackColor;
+
+                    if (isDefault) {
+                        if (inColoredSequence) { outputParts.push(whiteCode); inColoredSequence = false; }
+                        Array.from(node.childNodes).forEach(child => parseNodes(child));
+                    } else {
+                        const words = (node.textContent || '').match(/\S+|\s+/g) || [];
+                        const colorCode = hexToChatColor(color, transparencyEnabled, transparencyValue);
+                        words.forEach(word => {
+                            if (word.trim() === '') outputParts.push(word);
+                            else outputParts.push(colorCode + word);
+                        });
+                        inColoredSequence = true;
+                    }
+                }
+            }
+
+            Array.from(editor.childNodes).forEach(node => parseNodes(node));
+            if (inColoredSequence) outputParts.push(whiteCode);
+
+            const finalCode = outputParts.join('');
+            codeOutput.value = finalCode;
+            updateCounters(finalCode);
+        }
+
+        function updateCounters(code) {
+            const len = code.length;
+            const updateCounter = (el, max, current, name) => {
+                el.textContent = `${name}: ${current}/${max}`;
+                const ratio = current / max;
+                let colorVar = 'var(--success-color)';
+                if (ratio >= 0.95) colorVar = 'var(--danger-color)';
+                else if (ratio >= 0.8) colorVar = 'var(--warning-color)';
+                el.style.color = `var(${colorVar})`;
+            };
+            updateCounter(pmCounter, 1000, len, 'ЛС');
+            updateCounter(chatCounter, 294, len, 'Чат');
+        }
+
+        function applyRainbow(byWord = false) {
+            editor.focus();
+            restoreSelection();
+            const selection = window.getSelection();
+            if (!selection.rangeCount || selection.isCollapsed) return;
+            const range = selection.getRangeAt(0);
+            const text = selection.toString();
+            const items = byWord ? text.match(/\S+|\s+/g) || [] : Array.from(text);
+
+            range.deleteContents();
+            items.reverse().forEach(item => {
+                const span = document.createElement('span');
+                span.textContent = item;
+                if (item.trim() !== '') {
+                    const color = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
+                    span.style.color = color;
+                }
+                range.insertNode(span);
+            });
+            editor.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        document.addEventListener('selectionchange', saveSelection);
+        editor.addEventListener('blur', saveSelection);
+        editor.addEventListener('input', updateCodeAndCounters);
+        resetColorBtn.addEventListener('click', () => applyColor(defaultColor));
+        colorPickerInput.addEventListener('input', (e) => applyColor(e.target.value));
+        rainbowCharBtn.addEventListener('click', () => applyRainbow(false));
+        rainbowWordBtn.addEventListener('click', () => applyRainbow(true));
+
+        transparencyCheck.addEventListener('change', (e) => {
+            transparencyEnabled = e.target.checked;
+            transparencySlider.disabled = !transparencyEnabled;
+            updateCodeAndCounters();
+        });
+
+        transparencySlider.addEventListener('input', (e) => {
+            transparencyValue = parseInt(e.target.value);
+            if (transparencyEnabled) updateCodeAndCounters();
+        });
+        copyBtn.addEventListener('click', () => {
+            codeOutput.select();
+            navigator.clipboard.writeText(codeOutput.value).then(() => { alert("Код скопирован в буфер обмена!"); });
+        });
+        clearBtn.addEventListener('click', () => {
+            if (confirm("Вы уверены, что хотите очистить всё?")) {
+                editor.innerHTML = '';
+                updateCodeAndCounters();
+            }
+        });
+        updateCounters('');
+    });
+</script>
+
+</body>
+</html>
