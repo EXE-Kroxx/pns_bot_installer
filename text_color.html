@@ -161,7 +161,7 @@
         }
         .instructions-panel h3 {
             margin-bottom: 15px;
-            color: var(--text-main); /* Изменено на text-main */
+            color: var(--text-main);
             text-align: center;
         }
         .instructions-panel ul {
@@ -174,16 +174,16 @@
             line-height: 1.6;
             padding-left: 25px;
             position: relative;
-            color: var(--text-main); /* Убеждаемся, что текст белый */
+            color: var(--text-main);
         }
         .instructions-panel li::before {
             content: '➤';
             position: absolute;
             left: 0;
-            color: var(--accent-main); /* Символ акцента остается синим */
+            color: var(--accent-main);
         }
         .instructions-panel strong {
-            color: var(--text-main); /* Жирный текст остается белым */
+            color: var(--text-main);
         }
 
     </style>
@@ -214,7 +214,6 @@
         <div id="status-bar"><span id="pm-counter">ЛС: 0/1000</span> | <span id="chat-counter">Чат: 0/294</span></div>
     </div>
 
-    <!-- ДОБАВЛЕННЫЙ БЛОК С ИНСТРУКЦИЕЙ -->
     <div class="instructions-panel">
         <h3>Как пользоваться редактором</h3>
         <ul>
@@ -230,7 +229,6 @@
 </div>
 
 <script>
-    // --- Логика приложения (без изменений) ---
     document.addEventListener('DOMContentLoaded', () => {
         const editor = document.getElementById('editor');
         const codeOutput = document.getElementById('code-output');
@@ -291,6 +289,28 @@
             return "#" + result.map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
         }
 
+        // ИСПРАВЛЕННАЯ ФУНКЦИЯ ОЧИСТКИ ИЗБЫТОЧНЫХ ТЕГОВ
+function cleanRedundantResetTags(code) {
+    const resetTag = /\[f\[\[#C0\]-\]fffff\]/g;
+
+    return code.replace(resetTag, (match, offset) => {
+        const afterTagIndex = offset + match.length;
+        const remainingText = code.substring(afterTagIndex);
+
+        // Находим первый непробельный символ после тега
+        const firstNonWhitespaceChar = remainingText.match(/[^\s\n\t]/);
+
+        // Если следующий непробельный символ - '[', удаляем тег
+        if (firstNonWhitespaceChar && firstNonWhitespaceChar[0] === '[') {
+            return '';
+        }
+
+        // В остальных случаях оставляем тег
+        return match;
+    });
+}
+
+
         function applyColor(color) {
             editor.focus();
             restoreSelection();
@@ -305,11 +325,17 @@
 
             function parseNodes(node) {
                 if (node.nodeType === Node.TEXT_NODE) {
-                    if (inColoredSequence) { outputParts.push(whiteCode); inColoredSequence = false; }
+                    if (inColoredSequence) {
+                        outputParts.push(whiteCode);
+                        inColoredSequence = false;
+                    }
                     outputParts.push(node.textContent);
                 } else if (node.nodeType === Node.ELEMENT_NODE) {
                     if (node.tagName === 'BR') {
-                        if (inColoredSequence) { outputParts.push(whiteCode); inColoredSequence = false; }
+                        if (inColoredSequence) {
+                            outputParts.push(whiteCode);
+                            inColoredSequence = false;
+                        }
                         outputParts.push('\n');
                         return;
                     }
@@ -318,24 +344,39 @@
                     const isDefault = !color || color === defaultColor || color === blackColor;
 
                     if (isDefault) {
-                        if (inColoredSequence) { outputParts.push(whiteCode); inColoredSequence = false; }
+                        if (inColoredSequence) {
+                            outputParts.push(whiteCode);
+                            inColoredSequence = false;
+                        }
                         Array.from(node.childNodes).forEach(child => parseNodes(child));
                     } else {
                         const words = (node.textContent || '').match(/\S+|\s+/g) || [];
                         const colorCode = hexToChatColor(color, transparencyEnabled, transparencyValue);
+
                         words.forEach(word => {
-                            if (word.trim() === '') outputParts.push(word);
-                            else outputParts.push(colorCode + word);
+                            if (word.trim() === '') {
+                                outputParts.push(word);
+                            } else {
+                                outputParts.push(colorCode + word);
+                            }
                         });
+
                         inColoredSequence = true;
                     }
                 }
             }
 
             Array.from(editor.childNodes).forEach(node => parseNodes(node));
-            if (inColoredSequence) outputParts.push(whiteCode);
 
-            const finalCode = outputParts.join('');
+            if (inColoredSequence) {
+                outputParts.push(whiteCode);
+            }
+
+            let finalCode = outputParts.join('');
+
+            // ПРИМЕНЯЕМ ОЧИСТКУ ИЗБЫТОЧНЫХ ТЕГОВ
+            finalCode = cleanRedundantResetTags(finalCode);
+
             codeOutput.value = finalCode;
             updateCounters(finalCode);
         }
