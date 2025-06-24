@@ -124,22 +124,26 @@ var GameDisplay = function (context, pallet, debugging) {
         });
     };
 
-    self.HandleCanvasClick = function(event) {
-        const rect = self.Context.canvas.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-
-        if (self.ClickAreas) {
-            for (let area of self.ClickAreas) {
-                if (x >= area.x1 && x <= area.x2 && y >= area.y1 && y <= area.y2) {
-                    if (self.OnSegmentClick) {
-                        self.OnSegmentClick(area.tubeIndex, area.segmentIndex);
-                    }
-                    break;
+self.HandleCanvasClick = function(event) {
+    const rect = self.Context.canvas.getBoundingClientRect();
+    let x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    
+    if (self.ClickAreas) {
+        for (let area of self.ClickAreas) {
+            // Смещаем зону клика на 10 пикселей влево для каждой следующей колбы
+            const offset = area.tubeIndex * 1.3;
+            const adjustedX = x + offset;
+            
+            if (adjustedX >= area.x1 && adjustedX <= area.x2 && y >= area.y1 && y <= area.y2) {
+                if (self.OnSegmentClick) {
+                    self.OnSegmentClick(area.tubeIndex, area.segmentIndex);
                 }
+                break;
             }
         }
-    };
+    }
+};
 
     self.GetVialDimensions = function (numStacks) {
         const dimsArray = [];
