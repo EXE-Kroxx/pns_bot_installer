@@ -146,15 +146,15 @@ self.CurrentEditingPaletteColor = null;
 
     self.Canvas = null;
     self.InitializedCanvas = function () {
-        const width = 400;
+        const width = 405;
         const height = 620;
         const canvas = document.querySelector('#canvas');
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';
-        //const scale = window.devicePixelRatio;
-        canvas.width = width //* scale;
-        canvas.height = height //* scale;
-        //canvas.getContext('2d').scale(scale, scale);
+        const scale = window.devicePixelRatio;
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+        canvas.getContext('2d').scale(scale, scale);
         return canvas;
     };
 
