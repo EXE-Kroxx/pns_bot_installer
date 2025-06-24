@@ -146,7 +146,7 @@ self.CurrentEditingPaletteColor = null;
 
     self.Canvas = null;
     self.InitializedCanvas = function () {
-        const width = 400;
+        const width = 500;
         const height = 620;
         const canvas = document.querySelector('#canvas');
         canvas.style.width = width + 'px';
