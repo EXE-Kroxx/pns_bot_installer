@@ -126,8 +126,9 @@ var GameDisplay = function (context, pallet, debugging) {
 
 self.HandleCanvasClick = function(event) {
     const rect = self.Context.canvas.getBoundingClientRect();
-    let x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const scale = window.devicePixelRatio || 1;
+    let x = (event.clientX - rect.left)* scale;
+    const y = (event.clientY - rect.top)* scale;
     
     if (self.ClickAreas) {
         for (let area of self.ClickAreas) {
