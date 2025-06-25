@@ -151,7 +151,7 @@ self.HandleCanvasClick = function(event) {
     if (self.ClickAreas) {
         for (let area of self.ClickAreas) {
             // Разное смещение для мобильных и десктопных устройств
-            const offset = isMobile ? area.tubeIndex * 50 : area.tubeIndex * 1.3;
+            const offset = isMobile ? area.tubeIndex * 15 : area.tubeIndex * 1.3;
             const adjustedX = x + offset;
             
             if (adjustedX >= area.x1 && adjustedX <= area.x2 && y >= area.y1 && y <= area.y2) {
