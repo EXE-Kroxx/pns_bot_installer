@@ -116,32 +116,32 @@ self.SelectColor = function(colorData) {
 };
 
     // Очистка цвета сегмента
+// ЗАМЕНИТЕ СТАРУЮ ФУНКЦИЮ НА ЭТУ
 self.ClearTubeColor = function() {
     const tubeIndex = self.CurrentEditingTube();
     const segmentIndex = self.CurrentEditingSegment();
-    
-    // Если редактируем сегмент колбы
+
+    // Убеждаемся, что мы редактируем именно сегмент колбы
     if (tubeIndex !== null && segmentIndex !== null) {
         const tube = self.Tubes()[tubeIndex];
         let currentCode = tube.LetterColorCode().toUpperCase();
-        
+
+        // Дополняем строку пробелами, чтобы индексы всегда были корректны
         while (currentCode.length < 4) {
             currentCode += ' ';
         }
-        
+
         const codeArray = currentCode.split('');
-        codeArray[3 - segmentIndex] = ' ';
-        tube.LetterColorCode(codeArray.join('').trim());
-    }
-    // Если редактируем цвет в палитре - удаляем его
-    else if (self.CurrentEditingPaletteColor) {
-        const index = self.Pallet().indexOf(self.CurrentEditingPaletteColor);
-        if (index > -1) {
-            self.Pallet.splice(index, 1);
-        }
-        self.CurrentEditingPaletteColor = null;
+
+        // --- ГЛАВНОЕ ИСПРАВЛЕНИЕ ---
+        // Используем правильный индекс сегмента без инвертирования
+        codeArray[segmentIndex] = ' ';
+        
+        // Обновляем код колбы, убирая лишние пробелы только в конце строки
+        tube.LetterColorCode(codeArray.join('').trimEnd());
     }
     
+    // Закрываем модальное окно после выполнения действия
     $('#colorPickerModal').modal('hide');
 };
 
