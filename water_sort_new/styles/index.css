@@ -184,6 +184,11 @@ canvas {
     max-width: 100%;
     height: auto;
     background-color: #2b2b2b;
+        /* Для мобильных устройств */
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 /* Отключение зума по двойному тапу */
