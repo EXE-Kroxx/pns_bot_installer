@@ -145,10 +145,13 @@ self.HandleCanvasClick = function(event) {
     let x = clientX - rect.left;
     const y = clientY - rect.top;
     
+    // Определяем мобильное устройство
+    const isMobile = /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i.test(navigator.userAgent);
+    
     if (self.ClickAreas) {
         for (let area of self.ClickAreas) {
-            // Смещаем зону клика на 1.3 пикселя влево для каждой следующей колбы
-            const offset = area.tubeIndex * 1.3;
+            // Разное смещение для мобильных и десктопных устройств
+            const offset = isMobile ? area.tubeIndex * 5 : area.tubeIndex * 1.3;
             const adjustedX = x + offset;
             
             if (adjustedX >= area.x1 && adjustedX <= area.x2 && y >= area.y1 && y <= area.y2) {
@@ -160,6 +163,7 @@ self.HandleCanvasClick = function(event) {
         }
     }
 };
+
 
 
     self.GetVialDimensions = function (numStacks) {
