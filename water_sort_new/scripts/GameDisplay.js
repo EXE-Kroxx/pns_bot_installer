@@ -125,14 +125,29 @@ var GameDisplay = function (context, pallet, debugging) {
     };
 
 self.HandleCanvasClick = function(event) {
+    event.preventDefault(); // Предотвращаем стандартное поведение на мобильных
+    
     const rect = self.Context.canvas.getBoundingClientRect();
-    const scale = window.devicePixelRatio || 1;
-    let x = (event.clientX - rect.left) / scale;
-    const y = (event.clientY - rect.top) / scale;
+    let clientX, clientY;
+    
+    // Определяем тип события и получаем правильные координаты
+    if (event.type === 'touchstart' || event.type === 'touchend') {
+        // Для touch-событий используем первое касание
+        const touch = event.touches[0] || event.changedTouches[0];
+        clientX = touch.clientX;
+        clientY = touch.clientY;
+    } else {
+        // Для mouse-событий
+        clientX = event.clientX;
+        clientY = event.clientY;
+    }
+    
+    let x = clientX - rect.left;
+    const y = clientY - rect.top;
     
     if (self.ClickAreas) {
         for (let area of self.ClickAreas) {
-            // Смещаем зону клика на 10 пикселей влево для каждой следующей колбы
+            // Смещаем зону клика на 1.3 пикселя влево для каждой следующей колбы
             const offset = area.tubeIndex * 1.3;
             const adjustedX = x + offset;
             
@@ -145,6 +160,7 @@ self.HandleCanvasClick = function(event) {
         }
     }
 };
+
 
     self.GetVialDimensions = function (numStacks) {
         const dimsArray = [];
