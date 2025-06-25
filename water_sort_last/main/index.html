@@ -258,7 +258,7 @@
                     <!-- Цвета будут добавлены динамически -->
                 </div>
                 <div class="mt-2">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="viewModel.ClearTubeColor()" 
+                    <button type="button" class="btn btn-secondary btn-sm" data-bind="click: ClearTubeColor()" 
                             data-bind="text: CurrentEditingPaletteColor ? 'Удалить цвет' : 'Очистить'">
                         Очистить
                     </button>
