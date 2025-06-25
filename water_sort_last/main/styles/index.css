@@ -409,3 +409,38 @@ canvas {
     max-width: 200px;
     word-wrap: break-word;
 }
+
+/* Файл: index.css */
+
+/* Стили для значка со счетчиком на палитре цветов */
+.color-count-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background-color: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон для читаемости */
+    color: #ffffff; /* Белый цвет текста */
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px; /* Делаем его круглым */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 2px;
+    
+    /* Та самая черная обводка для текста */
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+}
+
+/* Убедимся, что родительский элемент имеет position: relative. 
+   В вашем файле это уже есть, но добавим на всякий случай. */
+.color-option {
+    position: relative;
+}
+
