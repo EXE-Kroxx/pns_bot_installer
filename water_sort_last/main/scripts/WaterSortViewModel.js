@@ -45,22 +45,42 @@ self.PresetColors = [
         self.Tubes.push(new TubeModel(element[0], element[1], self));
     });
 
-    // Инициализация цветовой палитры
-    self.InitializeColorPicker = function() {
-        const palette = document.getElementById('colorPalette');
-        if (!palette) return;
+// Файл: WaterSortViewModel.js
+
+self.InitializeColorPicker = function() {
+    const palette = document.getElementById('colorPalette');
+    if (!palette) return;
+
+    palette.innerHTML = ''; // Очищаем старую палитру
+
+    // Обновляем счетчики перед отрисовкой палитры
+    self.UpdatePalletCounts();
+
+    self.PresetColors.forEach(colorData => {
+        const colorDiv = document.createElement('div');
+        colorDiv.className = 'color-option';
+        colorDiv.style.backgroundColor = colorData.color;
+        colorDiv.title = `${colorData.name} (${colorData.letter})`;
+        colorDiv.onclick = () => self.SelectColor(colorData);
+
+        // 1. Находим соответствующий цвет в нашей основной палитре, чтобы получить его счетчик
+        const palletItem = self.Pallet().find(p => p.Letter === colorData.letter);
+        const count = palletItem ? palletItem.Counter() : 0;
         
-        palette.innerHTML = '';
-        
-        self.PresetColors.forEach(colorData => {
-            const colorDiv = document.createElement('div');
-            colorDiv.className = 'color-option';
-            colorDiv.style.backgroundColor = colorData.color;
-            colorDiv.title = `${colorData.name} (${colorData.letter})`;
-            colorDiv.onclick = () => self.SelectColor(colorData);
-            palette.appendChild(colorDiv);
-        });
-    };
+        // 2. Если цвет используется, создаем и добавляем значок со счетчиком
+        if (count > 0) {
+            const countBadge = document.createElement('div');
+            countBadge.className = 'color-count-badge'; // Присваиваем класс для стилизации
+            countBadge.innerText = count;
+            colorDiv.appendChild(countBadge);
+        }
+
+        // --- КОНЕЦ ИЗМЕНЕНИЙ ---
+
+        palette.appendChild(colorDiv);
+    });
+};
+
 
     // Выбор цвета
 self.SelectColor = function(colorData) {
