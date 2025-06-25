@@ -145,18 +145,23 @@ self.CurrentEditingPaletteColor = null;
     });
 
     self.Canvas = null;
-    self.InitializedCanvas = function () {
-        const width = 405;
-        const height = 620;
-        const canvas = document.querySelector('#canvas');
-        canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';
-        const scale = window.devicePixelRatio;
-        canvas.width = width * scale;
-        canvas.height = height * scale;
-        canvas.getContext('2d').scale(scale, scale);
-        return canvas;
-    };
+self.InitializedCanvas = function () {
+    const logicalWidth = 405; // Логическая ширина для расчетов
+    const logicalHeight = 620; // Логическая высота для расчетов
+    const canvas = document.querySelector('#canvas');
+
+    // Этот код для HiDPI/Retina экранов оставляем, он корректен
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = logicalWidth * scale;
+    canvas.height = logicalHeight * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+
+    // Важно: нужно вернуть сам canvas, а не только контекст,
+    // чтобы в HandleCanvasClick можно было получить доступ к clientWidth.
+    // Ваш код уже возвращает canvas, так что здесь все в порядке.
+    return canvas;
+};
 
     self.UpdateGameDisplay = function () {
         if (self.IsResetting === false) {
