@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-506H2FQ71K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-506H2FQ71K');
+    </script>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Настройка и решатель головоломки Сортировка Реагентов из игры Puzzle and Survival" />
+    <meta name="author" content="470[TPM]OB-HAVE" />
+    <title>NEW Решатель Сортировки Реагентов в игре Puzzle &amp; Survival</title>
+
+    <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon" />
+    <link rel="icon" href="favicon-32x32.png" type="image/x-icon" />
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+	<link rel="stylesheet" href="styles/index.css" />
+
+</head>
+<body>
+	<div class="container" style="max-width: 435px; margin: 0 auto; padding-top: 15px;">
+    <ul style="list-style-type:none; padding-left: 0; margin-bottom: 15px;">
+      <li style="text-align: center;">
+        <a style="font-size:small;" href="https://www.robertfidler.com/puzzle-n-survival/index.html" target="_blank">Решатель Water Sort и Ball Sort</a>
+        <div style="clear: both; text-align: left;">
+          <p>Ссылка выше ведёт на оригинальную версию, которую я использовал для создания своей версии решателя Water Sort. Особая благодарность автору.</p>
+	  <p class="highlight-box">
+		Прокрутите вниз, чтобы прочитать инструкцию и выставить цвета.
+	  </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+<!-- Блок с кнопками и настройками -->
+<div id="controls-container" class="container">
+  <form role="form" style="max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px;">
+
+    <!-- Первый ряд -->
+    <div class="form-group" style="display: flex; gap: 10px; flex-wrap: nowrap;">
+      <div class="input-group" style="flex: 1 1 0; min-width: 0;">
+        <span class="input-group-addon">Количество пробирок</span>
+        <input type="number" class="form-control" min="3" max="18"
+               data-bind="enable: CanSolve, value: NumberOfTubes" />
+      </div>
+      <button type="button" class="btn btn-success"
+              data-bind="enable: CanSolve, click: Solve"
+              style="flex: 0 0 auto; white-space: nowrap;">
+        <span class="glyphicon glyphicon-ok"></span> <span data-bind="text: SolvedLabel"></span>
+      </button>
+    </div>
+
+    <!-- Второй ряд -->
+    <div class="form-group" style="display: flex; gap: 10px; flex-wrap: nowrap;">
+      <button type="button" class="btn btn-info" data-bind="click: Back, enable: CanBack"
+              style="flex: 1 1 0; min-width: 0; white-space: nowrap;">
+        <span class="glyphicon glyphicon-arrow-left"></span> Назад
+      </button>
+
+      <input type="text" readonly class="form-control text-center"
+             data-bind="enable: CanStep, value: SolutionLabel"
+             style="flex: 1 1 0; min-width: 0;" />
+
+      <button type="button" class="btn btn-info" data-bind="click: Step, enable: CanStep"
+              style="flex: 1 1 0; min-width: 0; white-space: nowrap;">
+        Вперед <span class="glyphicon glyphicon-arrow-right"></span>
+      </button>
+    </div>
+
+    <!-- Третий ряд -->
+    <div class="form-group" style="display: flex; gap: 10px; flex-wrap: nowrap;">
+      <button type="button" class="btn btn-warning"
+              data-toggle="modal" data-target="#myModalClearConfirmation"
+              style="flex: 1 1 0; min-width: 0; white-space: nowrap;">
+        <span class="glyphicon glyphicon-remove-circle"></span> Очистить
+      </button>
+
+      <button type="button" class="btn btn-danger"
+              data-bind="click: Reset"
+              style="flex: 1 1 0; min-width: 0; white-space: nowrap;">
+        <span class="glyphicon glyphicon-refresh"></span> Сброс
+      </button>
+    </div>
+
+  </form>
+</div>
+
+
+
+  <!-- Основной контент -->
+  <div class="container" style="max-width: 435px; margin: 0 auto;">
+    <!-- Игровое поле -->
+    <div class="text-center" style="margin-bottom: 20px;">
+      <canvas id="canvas" class="disable-dbl-tap-zoom" width="435" height="620">
+        Ваш браузер не поддерживает элемент canvas.
+      </canvas>
+      <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasTextarea" aria-labelledby="offcanvasTextareaLabel">
+        <div class="offcanvas-body" style="width: 435px; margin: 0 auto;">
+          <textarea class="form-control" rows="5" placeholder="Нажмите «Решить», чтобы получить ходы..." data-bind="value: OutputWindow" style="resize: none;"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Настройки -->
+<div>
+  <form id="PuzzleSetup">
+    <h4>Инструкция / Instructions</h4>
+    <ul class="nav nav-sidebar well">
+      <li style="font-family: Courier New, Courier, monospace">
+        <div class="row">
+          <div class="col-12">
+            <h5 style="color: #007bff; font-weight: bold; margin-bottom: 15px;">🇷🇺 Русский</h5>
+            <ul style="list-style-type: disc; padding-left: 20px; margin-bottom: 25px;">
+              <li style="color: black; margin-bottom: 8px;">
+                <strong>Настройка пробирок:</strong>
+                <ul style="margin-top: 5px;">
+                  <li>Нажмите на любой сегмент пробирки (цветной или серый)</li>
+                  <li>Выберите нужный цвет из палитры (20 предустановленных цветов)</li>
+                  <li>Нажмите "Очистить" для удаления цвета из сегмента</li>
+                </ul>
+              </li>
+              <li style="color: black; margin-bottom: 8px;">
+                <strong>Решение головоломки:</strong>
+                <ul style="margin-top: 5px;">
+                  <li>Убедитесь, что каждый цвет используется ровно 4 раза</li>
+                  <li>Нажмите кнопку "Решить" для поиска решения</li>
+                  <li>Используйте кнопки "Вперед" и "Назад" для просмотра шагов</li>
+                </ul>
+              </li>
+            </ul>
+            
+            <h5 style="color: #28a745; font-weight: bold; margin-bottom: 15px;">🇺🇸 English</h5>
+            <ul style="list-style-type: disc; padding-left: 20px; margin-bottom: 25px;">
+              <li style="color: black; margin-bottom: 8px;">
+                <strong>Setting up tubes:</strong>
+                <ul style="margin-top: 5px;">
+                  <li>Click on any tube segment (colored or gray)</li>
+                  <li>Select the desired color from the palette (20 preset colors)</li>
+                  <li>Click "Clear" to remove color from segment</li>
+                </ul>
+              </li>
+              <li style="color: black; margin-bottom: 8px;">
+                <strong>Solving puzzle:</strong>
+                <ul style="margin-top: 5px;">
+                  <li>Ensure each color is used exactly 4 times</li>
+                  <li>Click "Solve" button to find solution</li>
+                  <li>Use "Forward" and "Back" buttons to view solution steps</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <hr style="margin: 20px 0;" />
+        
+        <div class="row">
+          <div class="col-12">
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #007bff;">
+              <h6 style="color: #007bff; margin-bottom: 10px;">💡 Совет / Tip:</h6>
+              <p style="margin: 0; color: #6c757d; font-size: 14px;">
+                <strong>RU:</strong> Для корректного решения каждый цвет должен встречаться ровно 4 раза в головоломке.<br>
+                <strong>EN:</strong> For correct solving, each color must appear exactly 4 times in the puzzle.
+              </p>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </form>
+</div>
+
+
+  <!-- Модальное окно -->
+  <div class="modal fade" id="myModalClearConfirmation" tabindex="-1" role="dialog" aria-labelledby="myModalClearLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Закрыть"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalClearLabel">Очистить настройку головоломки</h4>
+        </div>
+        <div class="modal-body">
+          Это действие полностью сбросит текущую настройку головоломки и позволит начать заново.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+          <button type="button" class="btn btn-warning" data-bind="click: Clear">
+            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;&nbsp;Очистить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="snackbar" data-bind="class: ToastClasses" role="alert">
+    <strong data-bind="text: DisplayTagLine"></strong>&nbsp;<span data-bind="text: DisplayMessage"></span>
+  </div>
+
+  <!-- Скрипты -->
+  <script src="../../code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="../../code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script src="../../cdn.jsdelivr.net/npm/js-cookie%403.0.5/dist/js.cookie.min.js"></script>
+  <script src="../../maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="../../cdnsrc.asp.net/ajax/knockout/knockout-3.5.0.js"></script>
+  <script src="../../chir.ag/projects/ntc/ntc.js"></script>
+  <script src="scripts/PalletModel.js"></script>
+  <script src="scripts/TubeModel.js"></script>
+  <script src="scripts/Stack.js"></script>
+  <script src="scripts/GameState.js"></script>
+  <script src="scripts/GameDisplay.js"></script>
+  <script src="scripts/WaterSortViewModel.js"></script>
+
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+      var tubes = [
+        [1, "BGBL"],
+        [2, "IDLB"],
+        [3, "GLIL"],
+        [4, "DBIK"],
+        [5, "KDHK"],
+        [6, "HGHI"],
+        [7, "KHGD"],
+        [8, ""],
+        [9, ""]
+      ];
+	  var pallet = [
+        ["A", "#e4627c"], ["B", "#de372f"], ["C", "#794d1e"], ["D", "#752037"],
+        ["E", "#ec8525"], ["F", "#175c23"], ["G", "#a3067c"], ["H", "#41d575"],
+        ["I", "#473cc6"], ["J", "#5ca6e1"], ["K", "#8732cd"], ["L", "#d695d5"],
+        ["M", "#c8866e"], ["N", "#119579"], ["O", "#1d2e36"], ["P", "#ff69b3"],
+		["Q", "#4b0081"], ["R", "#fed700"], ["S", "#81007f"], ["T", "#EE82EE"]
+      ];
+      var vm = new WaterSortViewModel({ "Tubes": tubes, "Pallet": pallet });
+      ko.applyBindings(vm);
+      vm.UpdateOnChangeEvents();
+    });
+  </script>
+<!-- Модальное окно для выбора цвета -->
+<div id="colorPickerModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" data-bind="text: CurrentEditingPaletteColor ? 'Изменить цвет в палитре' : 'Выберите цвет для колбы'">Выберите цвет</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="colorPalette" class="color-palette">
+                    <!-- Цвета будут добавлены динамически -->
+                </div>
+                <div class="mt-2">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="viewModel.ClearTubeColor()" 
+                            data-bind="text: CurrentEditingPaletteColor ? 'Удалить цвет' : 'Очистить'">
+                        Очистить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
