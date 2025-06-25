@@ -125,36 +125,42 @@ var GameDisplay = function (context, pallet, debugging) {
     };
 
 self.HandleCanvasClick = function(event) {
-    event.preventDefault(); // Предотвращаем стандартное поведение на мобильных
-    
+    event.preventDefault(); 
     const rect = self.Context.canvas.getBoundingClientRect();
     let clientX, clientY;
-    
-    // Определяем тип события и получаем правильные координаты
+
     if (event.type === 'touchstart' || event.type === 'touchend') {
-        // Для touch-событий используем первое касание
         const touch = event.touches[0] || event.changedTouches[0];
         clientX = touch.clientX;
         clientY = touch.clientY;
     } else {
-        // Для mouse-событий
         clientX = event.clientX;
         clientY = event.clientY;
     }
+
+    // --- НАЧАЛО ИЗМЕНЕНИЙ ---
+
+    // 1. Получаем реальные размеры Canvas из CSS и его внутреннее разрешение
+    const cssWidth = self.Context.canvas.clientWidth;
+    const cssHeight = self.Context.canvas.clientHeight;
+    const canvasWidth = self.Context.canvas.width;
+    const canvasHeight = self.Context.canvas.height;
     
-    let x = clientX - rect.left;
-    const y = clientY - rect.top;
-    
-    // Определяем мобильное устройство
-    const isMobile = /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/i.test(navigator.userAgent);
-    
+    // 2. Вычисляем коэффициенты масштабирования
+    const scaleX = canvasWidth / cssWidth;
+    const scaleY = canvasHeight / cssHeight;
+
+    // 3. Масштабируем координаты клика, чтобы они соответствовали внутренней системе координат
+    const x = (clientX - rect.left) * scaleX;
+    const y = (clientY - rect.top) * scaleY;
+
+    // --- КОНЕЦ ИЗМЕНЕНИЙ ---
+
     if (self.ClickAreas) {
         for (let area of self.ClickAreas) {
-            // Разное смещение для мобильных и десктопных устройств
-            const offset = isMobile ? area.tubeIndex * 10 : area.tubeIndex * 1.3;
-            const adjustedX = x + offset;
-            
-            if (adjustedX >= area.x1 && adjustedX <= area.x2 && y >= area.y1 && y <= area.y2) {
+            // 4. Используем отмасштабированные координаты для проверки попадания
+            // Старый код с 'offset' и 'adjustedX' полностью удаляем
+            if (x >= area.x1 && x <= area.x2 && y >= area.y1 && y <= area.y2) {
                 if (self.OnSegmentClick) {
                     self.OnSegmentClick(area.tubeIndex, area.segmentIndex);
                 }
@@ -163,6 +169,7 @@ self.HandleCanvasClick = function(event) {
         }
     }
 };
+
 
 
 
