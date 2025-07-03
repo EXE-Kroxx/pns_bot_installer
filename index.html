@@ -98,6 +98,16 @@
             transform: scale(1.05);
         }
 
+        /* Новая кнопка FAQ */
+        .btn-faq {
+            background: #6f42c1;
+            color: white;
+        }
+        .btn-faq:hover {
+            background: #8a63d2;
+            transform: scale(1.05);
+        }
+
         /* Новая кнопка */
         .btn-tetromino {
             background: #28a745;
@@ -109,6 +119,59 @@
         }
         .btn-tetromino:hover {
             background: #34d058;
+            transform: scale(1.05);
+        }
+
+        /* Специальные цвета для кнопок внутри выпадающих меню */
+        .btn-google {
+            background: #4285f4;
+            color: white;
+            font-size: 15.3px;
+            padding: 12.75px;
+            width: 85%;
+            align-self: center;
+        }
+        .btn-google:hover {
+            background: #5a95f5;
+            transform: scale(1.05);
+        }
+
+        .btn-yandex-inner {
+            background: #ffcc00;
+            color: #333;
+            font-size: 15.3px;
+            padding: 12.75px;
+            width: 85%;
+            align-self: center;
+        }
+        .btn-yandex-inner:hover {
+            background: #ffdb4d;
+            transform: scale(1.05);
+        }
+
+        .btn-instruction-inner {
+            background: #90ee90;
+            color: #333;
+            font-size: 15.3px;
+            padding: 12.75px;
+            width: 85%;
+            align-self: center;
+        }
+        .btn-instruction-inner:hover {
+            background: #a8f3a8;
+            transform: scale(1.05);
+        }
+
+        .btn-faq-inner {
+            background: #dda0dd;
+            color: #333;
+            font-size: 15.3px;
+            padding: 12.75px;
+            width: 85%;
+            align-self: center;
+        }
+        .btn-faq-inner:hover {
+            background: #e6b3e6;
             transform: scale(1.05);
         }
 
@@ -170,7 +233,7 @@
         }
 
         .dropdown-content.open {
-          max-height: 200px; /* увеличена, чтобы вместить масштаб */
+          max-height: 300px; /* увеличена для большего количества элементов */
           opacity: 1;
           margin-top: 15px;
         }
@@ -181,48 +244,64 @@
         }
     </style>
 <script>
-  function toggleDropdown() {
-    const el = document.getElementById('dropdown-tools');
+  function toggleDropdown(id) {
+    const el = document.getElementById(id);
     el.classList.toggle('open');
   }
 </script>
 <body>
     <div class="container">
         <h1>Добро пожаловать!</h1>
-        <p>Скачайте последнюю версию PNS Bot установщика:</p>
+        <p>Выберите нужный раздел:</p>
         <div class="btn-container">
-            <a class="btn btn-github" href="https://drive.google.com/file/d/1dpQKwc_mdzEgCjDikqZXFY7T3hAdeskh/view?usp=sharing">
-                ⬇ Скачать с GOOGLE DRIVE
-            </a>
-            <a class="btn btn-yandex" href="https://disk.yandex.ru/d/8uxSozRJBwAOoA">
-                ⬇ Скачать с YANDEX DISK
-            </a>
-            <a class="btn btn-instruction" href="https://docs.google.com/document/d/1zh9vOi13L9L-cmXuvkCoCRcGsbJ1h6hhAtFV1Ba5ww8/edit?tab=t.8mpn86fejop0#heading=h.s6yzenn7q11b">
-                📖 Инструкция по настройке
-            </a>
-            <!-- ДОБАВЛЕННАЯ КНОПКА -->
-            <a class="btn btn-instruction" href="https://pnsbot.ru/text_color.html" target="_blank">
-                🎨 Раскраска чата
-            </a>
-        </div>
-        <div class="dropdown-wrapper">
-          <button class="btn btn-beta dropdown-toggle" onclick="toggleDropdown()">
-            🧩 Мини Игры онлайн ▼
-          </button>
-          <div id="dropdown-tools" class="dropdown-content">
-            <a class="btn btn-tetromino" href="https://pnsbot.ru/blokie/index.html" target="_blank">
-              🎮 Мастер Тетромино онлайн
-            </a>
-            <a class="btn btn-tetromino" href="https://pnsbot.ru/water_sort/puzzle-n-survival/index.html" target="_blank">
-              🧪 Сортировка Реагентов онлайн
-            </a>
-            <a class="btn btn-tetromino" href="https://pnsbot.ru/water_sort_last/main/index.html" target="_blank">
-              🧪 Сортировка Реагентов онлайн NEW
-            </a>
-          </div>
-        </div>
+            <!-- Выпадающее меню для скачивания (синий цвет) -->
+            <div class="dropdown-wrapper">
+                <button class="btn btn-github dropdown-toggle" onclick="toggleDropdown('dropdown-download')">
+                    ⬇ Скачать PNS Bot ▼
+                </button>
+                <div id="dropdown-download" class="dropdown-content">
+                    <a class="btn btn-google" href="https://drive.google.com/file/d/1dpQKwc_mdzEgCjDikqZXFY7T3hAdeskh/view?usp=sharing" target="_blank">
+                        📁 Скачать с GOOGLE DRIVE
+                    </a>
+                    <a class="btn btn-yandex-inner" href="https://disk.yandex.ru/d/8uxSozRJBwAOoA" target="_blank">
+                        📁 Скачать с YANDEX DISK
+                    </a>
+                </div>
+            </div>
 
+            <!-- Выпадающее меню для справки (зеленый цвет) -->
+            <div class="dropdown-wrapper">
+                <button class="btn btn-instruction dropdown-toggle" onclick="toggleDropdown('dropdown-help')">
+                    📚 Справка и инструкции ▼
+                </button>
+                <div id="dropdown-help" class="dropdown-content">
+                    <a class="btn btn-instruction-inner" href="https://docs.google.com/document/d/1zh9vOi13L9L-cmXuvkCoCRcGsbJ1h6hhAtFV1Ba5ww8/edit?tab=t.8mpn86fejop0#heading=h.s6yzenn7q11b" target="_blank">
+                        📖 Инструкция по настройке
+                    </a>
+                    <a class="btn btn-faq-inner" href="faq.html" target="_blank">
+                        ❓ Часто задаваемые вопросы (FAQ)
+                    </a>
+                </div>
+            </div>
 
+            <!-- Выпадающее меню для игр -->
+            <div class="dropdown-wrapper">
+                <button class="btn btn-beta dropdown-toggle" onclick="toggleDropdown('dropdown-tools')">
+                    🧩 Мини Игры / Раскраска чата ▼
+                </button>
+                <div id="dropdown-tools" class="dropdown-content">
+                    <a class="btn btn-tetromino" href="https://pnsbot.ru/blokie/index.html" target="_blank">
+                        🎮 Мастер Тетромино онлайн
+                    </a>
+                    <a class="btn btn-tetromino" href="https://pnsbot.ru/water_sort_last/main/index.html" target="_blank">
+                        🧪 Сортировка Реагентов онлайн
+                    </a>
+                    <a class="btn btn-tetromino" href="https://pnsbot.ru/text_color.html" target="_blank">
+                        🎨 Раскраска чата
+                    </a>
+                </div>
+            </div>
+        </div>
 
         <!-- Ссылки на соцсети -->
         <div class="socials">
