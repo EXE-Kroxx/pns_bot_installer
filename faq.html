@@ -243,6 +243,113 @@
                 padding: 15px;
             }
         }
+        /* Добавьте эти стили в существующий CSS */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        border-radius: 10px;
+    }
+
+    .header, .content {
+        padding: 20px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .faq-question {
+        font-size: 16px;
+        padding: 15px;
+        /* Обеспечиваем правильное переносы текста */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+
+    .faq-answer {
+        /* Исправляем переполнение текста */
+        max-width: 100%;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+        box-sizing: border-box;
+        /* Убираем фиксированную ширину */
+        width: 100%;
+    }
+
+    .faq-answer.active {
+        padding: 15px;
+        /* Обеспечиваем правильное отображение */
+        max-height: none;
+        overflow: visible;
+    }
+
+    .faq-answer p {
+        font-size: 14px;
+        line-height: 1.4;
+        margin-bottom: 10px;
+        /* Принудительный перенос длинных слов */
+        word-break: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Исправляем ссылки */
+    .faq-answer a {
+        word-break: break-all;
+        display: inline-block;
+        max-width: 100%;
+    }
+
+    /* Исправляем предупреждения и успешные сообщения */
+    .warning, .success {
+        font-size: 14px;
+        padding: 8px 12px;
+        word-wrap: break-word;
+    }
+
+    /* Исправляем поиск и фильтры */
+    .search-input {
+        font-size: 14px;
+        padding: 12px 15px;
+    }
+
+    .category-filter {
+        gap: 8px;
+    }
+
+    .filter-btn {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    .back-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+}
+
+/* Дополнительные стили для очень маленьких экранов */
+@media (max-width: 480px) {
+    .header, .content {
+        padding: 15px;
+    }
+
+    .faq-question {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .faq-answer.active {
+        padding: 12px;
+    }
+
+    .faq-answer p {
+        font-size: 13px;
+    }
+}
     </style>
 </head>
 <body>
